@@ -81,7 +81,7 @@ with tab1:
     if st.session_state.analysis_done:
         risk_score = st.session_state['risk_score']
         with col2:
-            color = "#ff4b4b" if risk_score > 50 else "#09ab3b"
+            color = "#ff4b4b" if risk_score > 30 else "#09ab3b"
             st.markdown(f"<h2 style='color:{color}'>Risk Assessment: {risk_score:.1f}%</h2>", unsafe_allow_html=True)
             st.progress(int(risk_score))
             st.info(f"🤖 **AI Analysis:**\n\n{st.session_state['agent_analysis']}")
