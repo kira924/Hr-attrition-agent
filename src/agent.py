@@ -13,7 +13,7 @@ class HRAgent:
         
         if not self.use_mock:
             if not api_key:
-                print("⚠️ Warning: GROQ_API_KEY not found. Switching to Mock Mode.")
+                print(" Warning: GROQ_API_KEY not found. Switching to Mock Mode.")
                 self.use_mock = True
             else:
                 try:
@@ -24,7 +24,7 @@ class HRAgent:
                         groq_api_key=api_key
                     )
                 except Exception as e:
-                    print(f"⚠️ Error: {e}")
+                    print(f" Error: {e}")
                     self.use_mock = True
         
     def generate_explanation(self, employee_name, risk_score, contributing_factors):

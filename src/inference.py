@@ -14,7 +14,7 @@ def load_model():
     """
     # Check if the artifact file exists before loading
     if not os.path.exists(ARTIFACT_PATH):
-        raise FileNotFoundError(f"❌ Model file not found at: {ARTIFACT_PATH}. Please run the training script first.")
+        raise FileNotFoundError(f" Model file not found at: {ARTIFACT_PATH}. Please run the training script first.")
     
     # Load the artifacts dictionary from the disk
     artifacts = joblib.load(ARTIFACT_PATH)
@@ -44,6 +44,6 @@ def predict_attrition(model, input_data):
         probability = model.predict_proba(input_data)[0][1]
         return probability
     except Exception as e:
-        print(f"⚠️ Prediction Error: {e}")
+        print(f" Prediction Error: {e}")
         # Return 0.0 as a safe fallback in case of error
         return 0.0
