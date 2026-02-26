@@ -9,12 +9,6 @@
 
 ---
 
-## 🖼️ Dashboard Preview
-
-*(Place a screenshot of your Streamlit dashboard here, e.g., `![Dashboard Demo](dashboard_demo.png)`)*
-
----
-
 ## 🚀 Key Features
 
 * **🧠 High-Recall Prediction Engine:** Optimized specifically for the imbalanced nature of attrition data. The model is tuned to be "aggressive" (Threshold: 0.3), prioritizing the detection of leavers over precision.
@@ -120,11 +114,6 @@ streamlit run frontend/app.py
 
 ---
 
-## 🤝 Contributing
 
-Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://www.google.com/search?q=issues/).
-
----
-
-**Author:** [Your Name]
+**Author:** Khaled Abdulrahman
 **License:** MIT
