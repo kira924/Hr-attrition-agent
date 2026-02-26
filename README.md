@@ -1,4 +1,3 @@
-```markdown
 # 🛡️ HR Guardian: Intelligent Attrition Predictor & Explainer
 
 ![Python](https://img.shields.io/badge/Python-3.9%2B-blue)
@@ -129,8 +128,3 @@ Contributions, issues, and feature requests are welcome! Feel free to check the 
 
 **Author:** [Your Name]
 **License:** MIT
-
-
-بالتوفيق يا هندسة! 🚀
-
-```
