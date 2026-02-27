@@ -14,7 +14,7 @@ openai
 groq
 xgboost
 shap
-evidently
+evidently==0.4.15
 deepchecks
 matplotlib
 seaborn
@@ -25,4 +25,5 @@ uvicorn
 python-dotenv
 joblib
 langchain-huggingface
+
 
