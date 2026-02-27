@@ -1,5 +1,5 @@
 streamlit
-pandas
+pandas==2.3.3
 numpy
 scikit-learn
 tensorflow
@@ -25,3 +25,4 @@ uvicorn
 python-dotenv
 joblib
 langchain-huggingface
+
