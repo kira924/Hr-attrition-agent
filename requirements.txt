@@ -1,10 +1,10 @@
 streamlit
-pandas==2.3.3
-numpy
+pandas
+numpy>=1.26.0,<2.0.0
 scikit-learn
-tensorflow
+tensorflow==2.20.0
 keras
-langchain
+langchain==1.2.8
 langchain-google-genai
 langchain-groq
 langchain-openai
@@ -14,7 +14,7 @@ openai
 groq
 xgboost
 shap
-evidently==0.4.15
+evidently==0.4.33
 deepchecks
 matplotlib
 seaborn
@@ -25,5 +25,3 @@ uvicorn
 python-dotenv
 joblib
 langchain-huggingface
-
-
