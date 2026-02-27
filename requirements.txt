@@ -20,8 +20,7 @@ matplotlib==3.10.8
 seaborn==0.13.2
 plotly==5.24.1
 altair==6.0.0
-fastapi==0.125.0
-uvicorn==0.40.0
 langchain-huggingface==1.2.0
 joblib==1.5.3
 python-dotenv==1.2.1
+
