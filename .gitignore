@@ -16,3 +16,5 @@ models/*.joblib
 # IDE
 .vscode/
 .idea/
+
+.streamlit/secrets.toml
