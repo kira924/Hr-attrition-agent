@@ -25,7 +25,7 @@ def train_and_save_model():
     X_train, X_test, y_train, y_test = get_train_test_split(X, y)
     
     # Note: We are not using the calculated ratio here. 
-    # We use a fixed high value (10) to force the model to prioritize the minority class.
+    # We use a fixed high value (9) to force the model to prioritize the minority class.
     # ratio = float(np.sum(y_train == 0)) / np.sum(y_train == 1) 
     
     # 3. Initialize XGBoost Classifier

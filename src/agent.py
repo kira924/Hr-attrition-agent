@@ -1,4 +1,5 @@
 import os
+from typing import Any, Dict
 from langchain_core.prompts import PromptTemplate
 from langchain_groq import ChatGroq
 from langchain_core.output_parsers import StrOutputParser
@@ -88,3 +89,41 @@ class HRAgent:
 
     def _mock_response(self, name, score, factors):
         return f"[MOCK] Analysis for {name}: Risk is {score:.1f}%. Please check factors."
+
+    def generate_batch_report(self, batch_summary: Dict[str, Any]) -> str:
+        """Generate a consolidated text report for batch attrition risk.
+
+        Args:
+            batch_summary (Dict[str, Any]): Aggregate metrics for uploaded batch.
+
+        Returns:
+            str: LLM-generated report text.
+        """
+        template = """
+        You are an expert HR Analytics Consultant.
+        Create a concise, practical report from the following batch attrition summary.
+
+        BATCH SUMMARY:
+        {summary}
+
+        INSTRUCTIONS:
+        1. Provide an executive overview of the risk level.
+        2. Highlight the most important risk signal in the batch.
+        3. Recommend 3 practical retention actions for HR managers.
+        4. Keep the report concise and actionable.
+        """
+        prompt = PromptTemplate(input_variables=["summary"], template=template)
+        summary_text = "\n".join([f"- {key}: {value}" for key, value in batch_summary.items()])
+
+        if self.use_mock:
+            return (
+                "[MOCK] Batch report:\n"
+                f"Total employees: {batch_summary.get('total_employees', 0)} | "
+                f"High-risk ratio: {batch_summary.get('high_risk_ratio_pct', 0)}%."
+            )
+
+        try:
+            chain = prompt | self.llm | StrOutputParser()
+            return chain.invoke({"summary": summary_text}).strip()
+        except Exception as e:
+            return f"Error generating batch report: {e}"

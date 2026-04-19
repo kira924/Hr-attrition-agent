@@ -4,12 +4,39 @@ import sys
 import os
 import streamlit.components.v1 as components
 
+import streamlit as st
+import os
+
+
+# --- AI Agent API Key Management ---
+st.sidebar.header("🤖 AI Agent Settings")
+
+default_api_key = ""
+try:
+    default_api_key = st.secrets["GROQ_API_KEY"]
+except:
+    pass
+
+user_api_key = st.sidebar.text_input(
+    "API Key (Optional):", 
+    type="password",
+    help="We provide a demo key, but you can use your own to avoid rate limits."
+)
+
+final_api_key = user_api_key if user_api_key else default_api_key
+
+if final_api_key:
+    os.environ["GROQ_API_KEY"] = final_api_key
+    st.sidebar.success("✅ AI Explainer is Active!")
+else:
+    st.sidebar.warning("⚠️ Enter a API Key to unlock the AI Explainer.")
+
 # --- PATH SETUP ---
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
 
-from src.inference import load_model, predict_attrition
+from src.inference import load_model, predict_attrition, predict_attrition_batch
 from src.data_processing import load_data, preprocess_input
 from src.explainability import explain_single_instance
 from src.agent import HRAgent
@@ -31,7 +58,9 @@ df, model, agent = get_resources()
 st.title("🛡️ HR Guardian: Intelligent Attrition Predictor")
 
 # --- TABS LAYOUT ---
-tab1, tab2 = st.tabs(["🚀 Prediction Dashboard", "📈 Model Monitoring (Drift)"])
+tab1, tab2, tab3 = st.tabs(
+    ["🚀 Prediction Dashboard", "📈 Model Monitoring (Drift)", "📂 Batch Prediction"]
+)
 
 # =========================================
 # TAB 1: Prediction & Analysis
@@ -145,3 +174,91 @@ with tab2:
                     
             except Exception as e:
                 st.error(f" Error generating report: {e}")
+
+# =========================================
+# TAB 3: Batch Prediction
+# =========================================
+with tab3:
+    st.header("📂 Batch Prediction")
+    st.markdown(
+        "Upload a CSV file, run attrition prediction for all employees, "
+        "and download a consolidated AI risk report."
+    )
+
+    uploaded_file = st.file_uploader(
+        "Upload Employee CSV",
+        type=["csv"],
+        help="CSV rows should contain the same employee input fields used in the dashboard.",
+    )
+
+    if uploaded_file is not None:
+        try:
+            batch_df = pd.read_csv(uploaded_file)
+            st.write("Uploaded Data Preview")
+            st.dataframe(batch_df.head(20), use_container_width=True)
+
+            if st.button("Run Batch Prediction", use_container_width=True):
+                processed_rows = []
+                for row in batch_df.to_dict(orient="records"):
+                    processed_row, _ = preprocess_input(row, df)
+                    processed_rows.append(processed_row.iloc[0])
+
+                processed_batch_df = pd.DataFrame(processed_rows)
+                probabilities = predict_attrition_batch(model, processed_batch_df)
+                threshold = 0.30
+                risk_labels = [
+                    "High Risk" if prob >= threshold else "Low Risk"
+                    for prob in probabilities
+                ]
+
+                results_df = batch_df.copy()
+                results_df["Attrition_Probability"] = probabilities
+                results_df["Risk_Score_Pct"] = [round(prob * 100, 2) for prob in probabilities]
+                results_df["Risk_Label"] = risk_labels
+
+                st.session_state["batch_results_df"] = results_df
+                st.success("Batch prediction completed successfully.")
+
+            if "batch_results_df" in st.session_state:
+                results_df = st.session_state["batch_results_df"]
+                st.subheader("Batch Prediction Results")
+                st.dataframe(results_df, use_container_width=True)
+
+                total_employees = len(results_df)
+                high_risk_count = int((results_df["Risk_Label"] == "High Risk").sum())
+                avg_risk_pct = float(results_df["Risk_Score_Pct"].mean()) if total_employees > 0 else 0.0
+                max_risk_pct = float(results_df["Risk_Score_Pct"].max()) if total_employees > 0 else 0.0
+                min_risk_pct = float(results_df["Risk_Score_Pct"].min()) if total_employees > 0 else 0.0
+                high_risk_ratio_pct = (
+                    round((high_risk_count / total_employees) * 100, 2)
+                    if total_employees > 0
+                    else 0.0
+                )
+
+                summary = {
+                    "total_employees": total_employees,
+                    "high_risk_employees": high_risk_count,
+                    "high_risk_ratio_pct": high_risk_ratio_pct,
+                    "average_risk_pct": round(avg_risk_pct, 2),
+                    "max_risk_pct": round(max_risk_pct, 2),
+                    "min_risk_pct": round(min_risk_pct, 2),
+                }
+
+                if st.button("Generate Consolidated AI Report", use_container_width=True):
+                    with st.spinner("Generating consolidated report..."):
+                        report_text = agent.generate_batch_report(summary)
+                        st.session_state["batch_report_text"] = report_text
+
+                if "batch_report_text" in st.session_state:
+                    report_text = st.session_state["batch_report_text"]
+                    st.subheader("Consolidated Batch Report")
+                    st.text_area("Report", value=report_text, height=260)
+                    st.download_button(
+                        label="Download Batch Report (TXT)",
+                        data=report_text,
+                        file_name="batch_attrition_report.txt",
+                        mime="text/plain",
+                    )
+
+        except Exception as error:
+            st.error(f"Error processing uploaded CSV: {error}")

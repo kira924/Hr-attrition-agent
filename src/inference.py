@@ -1,6 +1,7 @@
 import joblib
 import os
 import pandas as pd
+from typing import List
 
 # Define the path to the saved model artifacts
 # We navigate back one directory from 'src' to reach the root, then into 'models'
@@ -47,3 +48,27 @@ def predict_attrition(model, input_data):
         print(f" Prediction Error: {e}")
         # Return 0.0 as a safe fallback in case of error
         return 0.0
+
+
+def predict_attrition_batch(model, input_data: pd.DataFrame) -> List[float]:
+    """Predict attrition probabilities for all rows in a dataframe.
+
+    Args:
+        model: Trained XGBoost classifier.
+        input_data (pd.DataFrame): Preprocessed feature matrix.
+
+    Returns:
+        List[float]: Probability of attrition for each row.
+    """
+    if not isinstance(input_data, pd.DataFrame):
+        raise TypeError("input_data must be a pandas DataFrame.")
+
+    if input_data.empty:
+        return []
+
+    try:
+        probabilities = model.predict_proba(input_data)[:, 1]
+        return probabilities.astype(float).tolist()
+    except Exception as e:
+        print(f" Batch Prediction Error: {e}")
+        return [0.0] * len(input_data)

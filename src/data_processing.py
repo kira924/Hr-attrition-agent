@@ -58,7 +58,7 @@ def preprocess_input(input_dict, _=None):
     if input_dict.get('Gender') == 'Male':
         input_df['Gender_Male'] = 1
     else:
-        input_df['Gender_Male'] = 0 # Means Female
+        input_df['Gender_Male'] = 0 
 
     # BusinessTravel
     travel = input_dict.get('BusinessTravel', 'Travel_Rarely')

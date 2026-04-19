@@ -1,0 +1,11 @@
+Age,MonthlyIncome,TotalWorkingYears,YearsAtCompany,NumCompaniesWorked,DistanceFromHome,EnvironmentSatisfaction,JobSatisfaction,WorkLifeBalance,OverTime,Gender,BusinessTravel,Department,JobRole,MaritalStatus
+25,2500,2,1,1,25,1,1,1,Yes,Male,Travel_Frequently,Sales,Sales Representative,Single
+45,12000,20,15,2,2,4,4,3,No,Female,Non-Travel,Research & Development,Manager,Married
+32,5500,8,5,4,10,3,3,3,No,Male,Travel_Rarely,Research & Development,Manufacturing Director,Divorced
+28,3200,4,2,1,18,2,2,2,Yes,Female,Travel_Frequently,Sales,Sales Representative,Single
+50,15000,25,10,3,5,4,3,4,No,Male,Travel_Rarely,Research & Development,Research Director,Married
+22,2100,1,1,1,20,1,2,1,Yes,Female,Travel_Frequently,Sales,Sales Representative,Single
+38,7000,12,8,2,3,3,4,3,No,Male,Travel_Rarely,Research & Development,Healthcare Representative,Married
+41,8500,18,12,5,8,4,3,3,No,Female,Non-Travel,Research & Development,Manager,Divorced
+35,6200,10,4,1,12,2,3,3,Yes,Male,Travel_Rarely,Sales,Sales Executive,Single
+29,4800,6,3,2,15,3,4,2,No,Female,Travel_Rarely,Research & Development,Laboratory Technician,Married

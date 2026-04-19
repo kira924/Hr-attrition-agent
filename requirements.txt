@@ -4,6 +4,7 @@ numpy<2.0.0
 scikit-learn
 tensorflow
 langchain
+langchain-core
 langchain-google-genai
 langchain-groq
 langchain-openai
